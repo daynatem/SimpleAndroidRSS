@@ -22,7 +22,7 @@ import com.endoapi.simplerss.parser.rss.RssFeedParser;
 
 public class SimpleRSSActivity extends Activity {
     /** Called when the activity is first created. */
-   
+   //https://daynatem@github.com/daynatem/SimpleAndroidRSS.git
     
     private RssFeedParser rss;
     private ProgressDialog progressDlg;
