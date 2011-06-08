@@ -7,6 +7,8 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,7 +28,7 @@ public class SimpleRSSActivity extends Activity {
     
     private RssFeedParser rss;
     private ProgressDialog progressDlg;
-    private List<Map<String, String>>data;
+    private List<HashMap<String, String>> data;
     
     
     private final Handler progressHandler = new Handler(){
@@ -35,7 +37,7 @@ public class SimpleRSSActivity extends Activity {
 		public void handleMessage(android.os.Message msg) {			
 			super.handleMessage(msg);
 			if(msg.obj!= null){
-				List<HashMap<String,String>> data = (List<HashMap<String, String>>) msg.obj;
+				data = (List<HashMap<String, String>>) msg.obj;
 				setData(data);
 				progressDlg.dismiss();
 			}
@@ -48,7 +50,7 @@ public class SimpleRSSActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        rss = new RssFeedParser("http://api.twitter.com/1/statuses/public_timeline.rss");
+        rss = new RssFeedParser("http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=androidcentral");
         
         setTitle("Twitter public timeline");
         
@@ -68,8 +70,14 @@ public class SimpleRSSActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-			
-				
+				String url;
+				if( (url=data.get(arg2).get(Message.TITLE)).contains("http://") ){
+					url=url.substring(url.indexOf("http:"));
+					if( url.indexOf(" ")>0 )
+						url = url.substring(0,url.indexOf(" "));
+					Intent browser = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+					startActivity(browser);
+				}
 				
 				
 			}
